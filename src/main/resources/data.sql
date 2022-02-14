@@ -1,0 +1,2 @@
+INSERT INTO TB_BASEUSER(name, email,phone_number,address) VALUES('Erick', 'erick@gmail.com', '(15)99818-1242', 'rua do erick, 123');
+INSERT INTO TB_PASSENGER(passenger_id, emergency_phone_number) VALUES (1, '(15)99716-3158');
