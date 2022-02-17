@@ -1,10 +1,16 @@
 package folks.api_flight.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.persistence.JoinColumn;
 
 import folks.api_flight.dto.PassengerDTO;
 import lombok.AllArgsConstructor;
@@ -23,6 +29,15 @@ public class Passenger extends BaseUser {
 
     @NotBlank(message = "The emergency phone number is mandatory!")
     private String emergencyPhoneNumber;
+
+    @ManyToMany
+    @JoinTable(
+        name="TB_PASSENGER_FLIGTH",
+        joinColumns =  @JoinColumn(name="PASSENGER_ID"),
+        inverseJoinColumns = @JoinColumn(name="FLIGTH_ID")
+    )
+    private List<Fligth> fligths = new ArrayList<>();
+    
 
     public Passenger(
             Long id,

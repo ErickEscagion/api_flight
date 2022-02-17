@@ -1,14 +1,19 @@
 package folks.api_flight.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
+import javax.persistence.JoinColumn;
 import folks.api_flight.dto.CrewDTO;
 import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
@@ -39,6 +44,15 @@ public class Crew extends BaseUser {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Office office;
+
+    @ManyToMany
+    @JoinTable(
+        name="TB_CREW_FLIGTH",
+        joinColumns =  @JoinColumn(name="CREW_ID"),
+        inverseJoinColumns = @JoinColumn(name="FLIGTH_ID")
+    )
+    private List<Fligth> fligths = new ArrayList<>();
+    
 
     public Crew(
             Long id,
