@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,7 +27,7 @@ public class CrewService {
     @Autowired
     private CrewRepository crewRepository;
 
-    public Page<CrewDTO> getCrews(Pageable pageRequest, String crewName, String crewEmail,
+    public Page<CrewDTO> getCrews(PageRequest pageRequest, String crewName, String crewEmail,
     String crewPhoneNumber, String crewAddress, Double crewSalary, Level crewLevel, Office crewOffice) {
         try {
             Page<Crew> list = crewRepository.findAll(pageRequest, crewName, crewEmail,
