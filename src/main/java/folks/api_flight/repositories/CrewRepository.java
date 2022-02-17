@@ -23,9 +23,25 @@ public interface CrewRepository extends JpaRepository<Crew, Long> {
                         "a.office = :crewOffice AND " +
                         "(LOWER(a.phoneNumber) LIKE LOWER(CONCAT('%', :crewPhoneNumber,'%'))) ")
         public Page<Crew> findAll(Pageable pageRequest, String crewName, String crewEmail,
-                        String crewPhoneNumber, String crewAddress, Double crewSalary, Level crewLevel, Office crewOffice);
+                        String crewPhoneNumber, String crewAddress, Double crewSalary, Level crewLevel,
+                        Office crewOffice);
 
         @Query("SELECT u FROM BaseUser u " +
                         "WHERE LOWER(u.email) = LOWER(:email)")
         public BaseUser findByEmail(String email);
+
+        @Query("SELECT a FROM Crew a " +
+                        "LEFT JOIN a.fligths e " +
+                        "WHERE " +
+                        "(e.id = :fligthId) AND " +
+                        "(LOWER(a.name) LIKE LOWER(CONCAT('%', :crewName,'%'))) AND " +
+                        "(LOWER(a.email) LIKE LOWER(CONCAT('%', :crewEmail,'%'))) AND " +
+                        "(LOWER(a.address) LIKE LOWER(CONCAT('%', :crewAddress,'%'))) AND " +
+                        "a.salary >= :crewSalary AND " +
+                        "a.level = :crewLevel AND " +
+                        "a.office = :crewOffice AND " +
+                        "(LOWER(a.phoneNumber) LIKE LOWER(CONCAT('%', :crewPhoneNumber,'%'))) ")
+        public Page<Crew> findAllByFligthId(Pageable pageRequest, Long fligthId, String crewName, String crewEmail,
+                        String crewPhoneNumber, String crewAddress, Double crewSalary, Level crewLevel,
+                        Office crewOffice);
 }
