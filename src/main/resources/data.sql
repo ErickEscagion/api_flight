@@ -12,5 +12,14 @@ INSERT INTO TB_CREW(level,office,salary,crew_id) VALUES ('PLENO','FLIGHTATTENDAN
 INSERT INTO TB_CREW(level,office,salary,crew_id) VALUES ('SENIOR','PILOT', 22590.90, 3);
 
 INSERT INTO TB_FLIGTH(arrival_place, available_seats, category, crew_climbed, crew_needed, occupied_seats, starting_place) VALUES ('chegada', 50, 'PARTICULAR', 1, 5, 13, 'partida');
-
 INSERT INTO TB_FLIGTH(arrival_place, available_seats, category, crew_climbed, crew_needed, occupied_seats, starting_place) VALUES ('natal', 100, 'COMMERCIAL', 1, 10, 1, 'sp');
+
+INSERT INTO TB_PASSENGER_FLIGTH (passenger_id, fligth_id) VALUES (4,1);
+INSERT INTO TB_PASSENGER_FLIGTH (passenger_id, fligth_id) VALUES (5,1);
+INSERT INTO TB_PASSENGER_FLIGTH (passenger_id, fligth_id) VALUES (4,2);
+
+INSERT INTO TB_CREW_FLIGTH (fligth_id, crew_id) VALUES (1, 3);
+INSERT INTO TB_CREW_FLIGTH (fligth_id, crew_id) VALUES (1, 2);
+INSERT INTO TB_CREW_FLIGTH (fligth_id, crew_id) VALUES (2, 1);
+INSERT INTO TB_CREW_FLIGTH (fligth_id, crew_id) VALUES (2, 2);
+
