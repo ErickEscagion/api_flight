@@ -10,6 +10,7 @@ import folks.api_flight.entities.BaseUser;
 import folks.api_flight.entities.Crew;
 import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,15 +21,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CrewDTO extends BaseUser {
+
+    @Schema(example = "4999.95", description = "Employee salary")
     @NotBlank(message = "The salary is mandatory!")
     @Column(nullable = false)
     private Double salary;
 
+    @Schema(example = "JUNIOR", description = "Employee level")
     @NotBlank(message = "The level is mandatory!")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Level level;
 
+    @Schema(example = "PILOT", description = "Employee office")
     @NotBlank(message = "The office is mandatory!")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

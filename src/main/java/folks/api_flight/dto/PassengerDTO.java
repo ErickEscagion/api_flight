@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 
 import folks.api_flight.entities.BaseUser;
 import folks.api_flight.entities.Passenger;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class PassengerDTO extends BaseUser {
 
+    @Schema(example = "(xx)xxxxx-xxxx", description = "Passenger emergency phone")
     @NotBlank(message = "The emergency phone number is mandatory!")
     private String emergencyPhoneNumber;
 
