@@ -101,6 +101,18 @@ public class FligthController {
         return ResponseEntity.ok(places);
     }
 
+    @PostMapping("/{id}/passengers/{passengerId}")
+    public ResponseEntity<PassengerDTO> insertPassenger(@PathVariable Long id, @PathVariable Long passengerId) {
+        PassengerDTO dto = fligthService.insertPassenger(id, passengerId);
+        return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping("{id}/passengers/{passengerId}")
+    public ResponseEntity<Void> deletePassenger(@PathVariable Long id, @PathVariable Long passengerId) {
+        fligthService.deletePassenger(id, passengerId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}/crews")
     public ResponseEntity<Page<CrewDTO>> getFligthCrews(
             @PathVariable Long id,

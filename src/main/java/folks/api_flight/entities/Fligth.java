@@ -82,4 +82,12 @@ public class Fligth implements Serializable {
     public void removeCrew(Crew crew) {
         this.crews.remove(crew);
     }
+
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
+    }
+
+    public void removePassenger(Passenger passenger) {
+        this.passengers.remove(passenger);
+    }
 }

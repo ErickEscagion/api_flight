@@ -101,6 +101,55 @@ public class FligthService {
         return passengers.map(PassengerDTO::new);
     }
 
+    public PassengerDTO insertPassenger(long id, long passengerId) {
+        Optional<Fligth> op = fligthRepository.findById(id);
+        Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));
+
+        if (fligth.getOccupiedSeats() >= fligth.getAvailableSeats()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The flight is already fully passengers");
+        }
+
+        List<Passenger> fligthPassengers = fligth.getPassengers();
+
+        fligthPassengers.forEach(p -> {
+            if (p.getId() == passengerId) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This passenger is already on the flight");
+            }
+        });
+
+        Optional<Passenger> opPassenger = passengerRepository.findById(passengerId);
+        Passenger passenger = opPassenger.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Passenger not found"));
+
+        fligth.addPassenger(passenger);
+        fligthRepository.save(fligth);
+
+        return new PassengerDTO(passenger);
+    }
+
+    public void deletePassenger(long id, long passengerId) {
+        Optional<Fligth> op = fligthRepository.findById(id);
+        Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));
+
+        List<Passenger> fligthPassengers = fligth.getPassengers();
+
+        Passenger passenger = null;
+
+        for (Passenger c : fligthPassengers) {
+            if (c.getId() == passengerId) {
+                passenger = c;
+                break;
+            }
+        }
+
+        if (passenger == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "This fligth does not have any passenger with the id " + passengerId);
+        }
+
+        fligth.removePassenger(passenger);
+        fligthRepository.save(fligth);
+    }
+    
     public Page<CrewDTO> getFligthCrews(PageRequest pageRequest, long id, String crewName, String crewEmail,
             String crewPhoneNumber, String crewAddress, Double crewSalary, Level crewLevel,
             Office crewOffice) {
