@@ -24,6 +24,7 @@ import folks.api_flight.dto.CrewDTO;
 import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
 import folks.api_flight.services.CrewService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/v1/crew")
@@ -32,6 +33,7 @@ public class CrewController {
     @Autowired
     private CrewService crewService;
 
+    @Operation(summary = "GET Crews", description = "Route to get all Crews", tags = "Crew")
     @GetMapping
     public ResponseEntity<Page<CrewDTO>> getCrews(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -51,6 +53,7 @@ public class CrewController {
         return ResponseEntity.ok(list);
     }
 
+    @Operation(summary = "POST Crew", description = "Route to post Crew", tags = "Crew")
     @PostMapping
     public ResponseEntity<CrewDTO> postCrew(@Valid @RequestBody CrewDTO insertDto) {
         CrewDTO dto = crewService.postCrew(insertDto);
@@ -58,18 +61,21 @@ public class CrewController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @Operation(summary = "GET Crew per ID", description = "Route to get Crew per ID", tags = "Crew")
     @GetMapping("{id}")
     public ResponseEntity<CrewDTO> getCrewById(@PathVariable Long id) {
         CrewDTO dto = crewService.getCrewById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "DELETE Crew per ID", description = "Route to delete Crew per ID", tags = "Crew")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCrew(@PathVariable Long id) {
         crewService.deleteCrew(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "PUT Crew per ID", description = "Route to put Crew per ID", tags = "Crew")
     @PutMapping("{id}")
     public ResponseEntity<CrewDTO> updateCrew(@Valid @PathVariable Long id, @Valid @RequestBody CrewDTO updateDto) {
         CrewDTO dto = crewService.updateCrew(id, updateDto);

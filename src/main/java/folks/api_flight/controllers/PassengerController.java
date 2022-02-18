@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import folks.api_flight.dto.PassengerDTO;
 import folks.api_flight.services.PassengerService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/v1/passenger")
@@ -30,6 +31,7 @@ public class PassengerController {
     @Autowired
     private PassengerService passengerService;
 
+    @Operation(summary = "POST passenger", description = "Route to post passenger", tags = "Passenger")
     @PostMapping
     public ResponseEntity<PassengerDTO> postPassenger(@Valid @RequestBody PassengerDTO insertDto) {
         PassengerDTO dto = passengerService.postPassenger(insertDto);
@@ -37,6 +39,7 @@ public class PassengerController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @Operation(summary = "GET passengers", description = "Route to get all passengers", tags = "Passenger")
     @GetMapping
     public ResponseEntity<Page<PassengerDTO>> getPassengers(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -54,18 +57,21 @@ public class PassengerController {
         return ResponseEntity.ok(list);
     }
 
+    @Operation(summary = "GET passenger per ID", description = "Route to get passenger per ID", tags = "Passenger")
     @GetMapping("{id}")
     public ResponseEntity<PassengerDTO> getPassengerById(@PathVariable Long id) {
         PassengerDTO dto = passengerService.getPassengerById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "DELETE passenger per ID", description = "Route to delete passenger per ID", tags = "Passenger")
     @DeleteMapping("{id}")
 	public ResponseEntity<Void> deletePassenger(@PathVariable Long id){
 		passengerService.deletePassenger(id); 
 		return ResponseEntity.noContent().build();
 	}
 
+    @Operation(summary = "PUT passenger per ID", description = "Route to put passenger per ID", tags = "Passenger")
     @PutMapping("{id}")
 	public ResponseEntity<PassengerDTO> updatePassenger(@Valid @PathVariable Long id, @Valid @RequestBody PassengerDTO updateDto){
 		PassengerDTO dto = passengerService.updatePassenger(id, updateDto); 

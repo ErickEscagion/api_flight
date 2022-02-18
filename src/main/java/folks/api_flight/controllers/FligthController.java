@@ -27,6 +27,7 @@ import folks.api_flight.enums.Category;
 import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
 import folks.api_flight.services.FligthService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/v1/fligth")
@@ -35,6 +36,7 @@ public class FligthController {
     @Autowired
     private FligthService fligthService;
 
+    @Operation(summary = "GET fligths", description = "Route to get all fligths", tags = "Fligth")
     @GetMapping
     public ResponseEntity<Page<FligthDTO>> getFligths(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -55,6 +57,7 @@ public class FligthController {
         return ResponseEntity.ok(list);
     }
 
+    @Operation(summary = "POST fligth", description = "Route to post fligth", tags = "Fligth")
     @PostMapping
     public ResponseEntity<FligthDTO> postFligth(@Valid @RequestBody FligthDTO insertDto) {
         FligthDTO dto = fligthService.postFligth(insertDto);
@@ -62,18 +65,20 @@ public class FligthController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @Operation(summary = "GET fligth per ID", description = "Route to get fligth per ID", tags = "Fligth")
     @GetMapping("{id}")
     public ResponseEntity<FligthDTO> getFligthById(@PathVariable Long id) {
         FligthDTO dto = fligthService.getFligthById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "DELETE fligth per ID", description = "Route to fligth passenger per ID", tags = "Fligth")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFligth(@PathVariable Long id) {
         fligthService.deleteFligth(id);
         return ResponseEntity.noContent().build();
     }
-
+    @Operation(summary = "PUT fligth per ID", description = "Route to put fligth per ID", tags = "Fligth")
     @PutMapping("{id}")
     public ResponseEntity<FligthDTO> updateFligth(@Valid @PathVariable Long id,
             @Valid @RequestBody FligthDTO updateDto) {
@@ -81,6 +86,7 @@ public class FligthController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @Operation(summary = "GET Fligth/Passenger", description = "Route to see all passengers on the flight", tags = "Fligt <-> Passenger")
     @GetMapping("/{id}/passengers")
     public ResponseEntity<Page<PassengerDTO>> getFligthPassengers(
             @PathVariable Long id,
@@ -101,18 +107,21 @@ public class FligthController {
         return ResponseEntity.ok(places);
     }
 
+    @Operation(summary = "POST Fligth/Passenger", description = "Route to connect the passenger to the flight", tags = "Fligt <-> Passenger")
     @PostMapping("/{id}/passengers/{passengerId}")
     public ResponseEntity<PassengerDTO> insertPassenger(@PathVariable Long id, @PathVariable Long passengerId) {
         PassengerDTO dto = fligthService.insertPassenger(id, passengerId);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "DELETE Fligth/Passenger", description = "Route to remove a passenger from a flight", tags = "Fligt <-> Passenger")
     @DeleteMapping("{id}/passengers/{passengerId}")
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id, @PathVariable Long passengerId) {
         fligthService.deletePassenger(id, passengerId);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "GET Fligth/Crew", description = "Route to see all crews on the flight", tags = "Fligt <-> Crew")
     @GetMapping("/{id}/crews")
     public ResponseEntity<Page<CrewDTO>> getFligthCrews(
             @PathVariable Long id,
@@ -135,12 +144,14 @@ public class FligthController {
         return ResponseEntity.ok(places);
     }
 
+    @Operation(summary = "POST Fligth/Crew", description = "Route to connect the crew to the flight", tags = "Fligt <-> Crew")
     @PostMapping("/{id}/crews/{crewId}")
     public ResponseEntity<CrewDTO> insertCrew(@PathVariable Long id, @PathVariable Long crewId) {
         CrewDTO dto = fligthService.insertCrew(id, crewId);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "DELETE Fligth/Crew", description = "Route to remove a crew from a flight", tags = "Fligt <-> Crew")
     @DeleteMapping("{id}/crews/{crewId}")
     public ResponseEntity<Void> deletePlace(@PathVariable Long id, @PathVariable Long crewId) {
         fligthService.deleteCrew(id, crewId);
