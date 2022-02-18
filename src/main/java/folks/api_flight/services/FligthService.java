@@ -163,6 +163,18 @@ public class FligthService {
         return crews.map(CrewDTO::new);
     }
 
+    public Page<CrewDTO> getFligthCrewsAll(PageRequest pageRequest, long id, String crewName, String crewEmail,
+            String crewPhoneNumber, String crewAddress, Double crewSalary) {
+        Optional<Fligth> op = fligthRepository.findById(id);
+
+        Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));
+
+        Page<Crew> crews = crewRepository.findAllByFligthIdAll(pageRequest, fligth.getId(), crewName,
+                crewEmail, crewPhoneNumber, crewAddress, crewSalary);
+
+        return crews.map(CrewDTO::new);
+    }
+
     public CrewDTO insertCrew(long id, long crewId) {
         Optional<Fligth> op = fligthRepository.findById(id);
         Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));

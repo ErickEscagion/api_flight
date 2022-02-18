@@ -121,7 +121,7 @@ public class FligthController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "GET Fligth/Crew", description = "Route to see all crews on the flight", tags = "Fligt <-> Crew")
+    @Operation(summary = "GET Fligth/Crew", description = "Route to see all crews on the flight(filter to enum)", tags = "Fligt <-> Crew")
     @GetMapping("/{id}/crews")
     public ResponseEntity<Page<CrewDTO>> getFligthCrews(
             @PathVariable Long id,
@@ -140,6 +140,27 @@ public class FligthController {
 
         Page<CrewDTO> places = fligthService.getFligthCrews(pageRequest, id, crewName,
                 crewEmail, crewPhoneNumber, crewAddress, crewSalary, crewLevel, crewOffice);
+
+        return ResponseEntity.ok(places);
+    }
+
+    @Operation(summary = "GET Fligth/Crew", description = "Route to see all crews on the flight", tags = "Fligt <-> Crew")
+    @GetMapping("/{id}/crewsAll")
+    public ResponseEntity<Page<CrewDTO>> getFligthCrewsAll(
+            @PathVariable Long id,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "5") Integer linesPerPage,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+            @RequestParam(value = "name", defaultValue = "") String crewName,
+            @RequestParam(value = "email", defaultValue = "") String crewEmail,
+            @RequestParam(value = "phoneNumber", defaultValue = "") String crewPhoneNumber,
+            @RequestParam(value = "address", defaultValue = "") String crewAddress,
+            @RequestParam(value = "salary", defaultValue = "0") Double crewSalary) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+
+        Page<CrewDTO> places = fligthService.getFligthCrewsAll(pageRequest, id, crewName,
+                crewEmail, crewPhoneNumber, crewAddress, crewSalary);
 
         return ResponseEntity.ok(places);
     }
