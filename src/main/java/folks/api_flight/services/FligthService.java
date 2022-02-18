@@ -1,5 +1,6 @@
 package folks.api_flight.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -111,6 +112,55 @@ public class FligthService {
                 crewEmail, crewPhoneNumber, crewAddress, crewSalary, crewLevel, crewOffice);
 
         return crews.map(CrewDTO::new);
+    }
+
+    public CrewDTO insertCrew(long id, long crewId) {
+        Optional<Fligth> op = fligthRepository.findById(id);
+        Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));
+
+        if (fligth.getCrewClimbed() >= fligth.getCrewNeeded()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The flight is already fully crewed");
+        }
+
+        List<Crew> fligthCrews = fligth.getCrews();
+
+        fligthCrews.forEach(p -> {
+            if (p.getId() == crewId) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This crew is already on the flight");
+            }
+        });
+
+        Optional<Crew> opCrew = crewRepository.findById(crewId);
+        Crew crew = opCrew.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Crew not found"));
+
+        fligth.addCrew(crew);
+        fligthRepository.save(fligth);
+
+        return new CrewDTO(crew);
+    }
+
+    public void deleteCrew(long id, long crewId) {
+        Optional<Fligth> op = fligthRepository.findById(id);
+        Fligth fligth = op.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fligth not found"));
+
+        List<Crew> fligthCrews = fligth.getCrews();
+
+        Crew crew = null;
+
+        for (Crew c : fligthCrews) {
+            if (c.getId() == crewId) {
+                crew = c;
+                break;
+            }
+        }
+
+        if (crew == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "This fligth does not have any crew with the id " + crewId);
+        }
+
+        fligth.removeCrew(crew);
+        fligthRepository.save(fligth);
     }
 
 }

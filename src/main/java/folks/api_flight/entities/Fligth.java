@@ -74,4 +74,12 @@ public class Fligth implements Serializable {
         this.arrivalPlace = dto.getArrivalPlace();
         this.category = dto.getCategory();
     }
+
+    public void addCrew(Crew crew) {
+        this.crews.add(crew);
+    }
+
+    public void removeCrew(Crew crew) {
+        this.crews.remove(crew);
+    }
 }
