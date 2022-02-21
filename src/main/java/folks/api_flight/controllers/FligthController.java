@@ -28,6 +28,8 @@ import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
 import folks.api_flight.services.FligthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/api/v1/fligth")
@@ -37,6 +39,9 @@ public class FligthController {
     private FligthService fligthService;
 
     @Operation(summary = "GET fligths", description = "Route to get all fligths", tags = "Fligth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET fligth"),
+    })
     @GetMapping
     public ResponseEntity<Page<FligthDTO>> getFligths(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -58,6 +63,11 @@ public class FligthController {
     }
 
     @Operation(summary = "POST fligth", description = "Route to post fligth", tags = "Fligth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created fligth"),
+            @ApiResponse(responseCode = "400", description = "Invalid enum value"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PostMapping
     public ResponseEntity<FligthDTO> postFligth(@Valid @RequestBody FligthDTO insertDto) {
         FligthDTO dto = fligthService.postFligth(insertDto);
@@ -66,6 +76,10 @@ public class FligthController {
     }
 
     @Operation(summary = "GET fligth per ID", description = "Route to get fligth per ID", tags = "Fligth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET fligth by ID"),
+            @ApiResponse(responseCode = "404", description = "Fligth Not Found"),
+    })
     @GetMapping("{id}")
     public ResponseEntity<FligthDTO> getFligthById(@PathVariable Long id) {
         FligthDTO dto = fligthService.getFligthById(id);
@@ -73,12 +87,22 @@ public class FligthController {
     }
 
     @Operation(summary = "DELETE fligth per ID", description = "Route to fligth passenger per ID", tags = "Fligth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Success delete passenger"),
+            @ApiResponse(responseCode = "404", description = "Passenger Not Found"),
+    })
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFligth(@PathVariable Long id) {
         fligthService.deleteFligth(id);
         return ResponseEntity.noContent().build();
     }
+
     @Operation(summary = "PUT fligth per ID", description = "Route to put fligth per ID", tags = "Fligth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success to PUT fligth"),
+            @ApiResponse(responseCode = "404", description = "Fligth Not Found"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PutMapping("{id}")
     public ResponseEntity<FligthDTO> updateFligth(@Valid @PathVariable Long id,
             @Valid @RequestBody FligthDTO updateDto) {
@@ -86,7 +110,19 @@ public class FligthController {
         return ResponseEntity.ok().body(dto);
     }
 
+    /*
+     * 
+     * ------------------------------
+     * Fligth < --- >Passenger
+     * ------------------------------
+     * 
+     */
+
     @Operation(summary = "GET Fligth/Passenger", description = "Route to see all passengers on the flight", tags = "Fligt <-> Passenger")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET Fligth/Passenger"),
+            @ApiResponse(responseCode = "404", description = "Fligth Not Found"),
+    })
     @GetMapping("/{id}/passengers")
     public ResponseEntity<Page<PassengerDTO>> getFligthPassengers(
             @PathVariable Long id,
@@ -108,6 +144,11 @@ public class FligthController {
     }
 
     @Operation(summary = "POST Fligth/Passenger", description = "Route to connect the passenger to the flight", tags = "Fligt <-> Passenger")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success to PUT Fligth/Passenger"),
+            @ApiResponse(responseCode = "404", description = "Fligth/Passenger Not Found"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PostMapping("/{id}/passengers/{passengerId}")
     public ResponseEntity<PassengerDTO> insertPassenger(@PathVariable Long id, @PathVariable Long passengerId) {
         PassengerDTO dto = fligthService.insertPassenger(id, passengerId);
@@ -115,13 +156,29 @@ public class FligthController {
     }
 
     @Operation(summary = "DELETE Fligth/Passenger", description = "Route to remove a passenger from a flight", tags = "Fligt <-> Passenger")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Success delete Fligth/Passenger"),
+            @ApiResponse(responseCode = "404", description = "Fligth/Passenger Not Found"),
+    })
     @DeleteMapping("{id}/passengers/{passengerId}")
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id, @PathVariable Long passengerId) {
         fligthService.deletePassenger(id, passengerId);
         return ResponseEntity.noContent().build();
     }
 
+    /*
+     * 
+     * ------------------------------
+     * Fligth < --- >Crew
+     * ------------------------------
+     * 
+     */
+
     @Operation(summary = "GET Fligth/Crew", description = "Route to see all crews on the flight(filter to enum)", tags = "Fligt <-> Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET Fligth/Crew"),
+            @ApiResponse(responseCode = "404", description = "Fligth Not Found"),
+    })
     @GetMapping("/{id}/crews")
     public ResponseEntity<Page<CrewDTO>> getFligthCrews(
             @PathVariable Long id,
@@ -166,6 +223,11 @@ public class FligthController {
     }
 
     @Operation(summary = "POST Fligth/Crew", description = "Route to connect the crew to the flight", tags = "Fligt <-> Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success to PUT Fligth/Crew"),
+            @ApiResponse(responseCode = "404", description = "Fligth/Crew Not Found"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PostMapping("/{id}/crews/{crewId}")
     public ResponseEntity<CrewDTO> insertCrew(@PathVariable Long id, @PathVariable Long crewId) {
         CrewDTO dto = fligthService.insertCrew(id, crewId);
@@ -173,6 +235,10 @@ public class FligthController {
     }
 
     @Operation(summary = "DELETE Fligth/Crew", description = "Route to remove a crew from a flight", tags = "Fligt <-> Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Success delete Fligth/Crew"),
+            @ApiResponse(responseCode = "404", description = "Fligth/Crew Not Found"),
+    })
     @DeleteMapping("{id}/crews/{crewId}")
     public ResponseEntity<Void> deletePlace(@PathVariable Long id, @PathVariable Long crewId) {
         fligthService.deleteCrew(id, crewId);

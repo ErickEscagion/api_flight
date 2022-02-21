@@ -25,6 +25,8 @@ import folks.api_flight.enums.Level;
 import folks.api_flight.enums.Office;
 import folks.api_flight.services.CrewService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/api/v1/crew")
@@ -34,6 +36,9 @@ public class CrewController {
     private CrewService crewService;
 
     @Operation(summary = "GET Crews", description = "Route to get all Crews", tags = "Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET crew"),
+    })
     @GetMapping
     public ResponseEntity<Page<CrewDTO>> getCrews(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -54,6 +59,11 @@ public class CrewController {
     }
 
     @Operation(summary = "POST Crew", description = "Route to post Crew", tags = "Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created crew"),
+            @ApiResponse(responseCode = "400", description = "Invalid enum value"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PostMapping
     public ResponseEntity<CrewDTO> postCrew(@Valid @RequestBody CrewDTO insertDto) {
         CrewDTO dto = crewService.postCrew(insertDto);
@@ -62,6 +72,10 @@ public class CrewController {
     }
 
     @Operation(summary = "GET Crew per ID", description = "Route to get Crew per ID", tags = "Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success doing GET crew by ID"),
+            @ApiResponse(responseCode = "404", description = "Crew Not Found"),
+    })
     @GetMapping("{id}")
     public ResponseEntity<CrewDTO> getCrewById(@PathVariable Long id) {
         CrewDTO dto = crewService.getCrewById(id);
@@ -69,6 +83,10 @@ public class CrewController {
     }
 
     @Operation(summary = "DELETE Crew per ID", description = "Route to delete Crew per ID", tags = "Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Success delete crew"),
+            @ApiResponse(responseCode = "404", description = "Crew Not Found"),
+    })
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCrew(@PathVariable Long id) {
         crewService.deleteCrew(id);
@@ -76,6 +94,11 @@ public class CrewController {
     }
 
     @Operation(summary = "PUT Crew per ID", description = "Route to put Crew per ID", tags = "Crew")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success to PUT crew"),
+            @ApiResponse(responseCode = "404", description = "Crew Not Found"),
+            @ApiResponse(responseCode = "409", description = "This e-mail already exists"),
+    })
     @PutMapping("{id}")
     public ResponseEntity<CrewDTO> updateCrew(@Valid @PathVariable Long id, @Valid @RequestBody CrewDTO updateDto) {
         CrewDTO dto = crewService.updateCrew(id, updateDto);
