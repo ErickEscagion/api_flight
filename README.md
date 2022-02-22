@@ -1,6 +1,6 @@
 # Fligth API
 
-#### API REST para cadastro de voos. Diagrama UML na imagem abaixo. 
+#### API REST para controle de voos. Diagrama UML na imagem abaixo. 
 
 ## Diagrama UML
 ![md](https://user-images.githubusercontent.com/55297869/154948847-d38125b5-a833-4552-8e6f-21683abe28d9.jpeg)
